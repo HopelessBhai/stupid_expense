@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="4dp"
             android:text="₹0"
+            android:textColor="@android:color/white"
             android:textAppearance="@android:style/TextAppearance.Material.Large"
             android:textStyle="bold" />
     </LinearLayout>
