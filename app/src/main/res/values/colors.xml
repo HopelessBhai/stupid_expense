@@ -4,4 +4,9 @@
     <color name="md_theme_onPrimary">#00332C</color>
     <color name="md_theme_background">#101417</color>
     <color name="md_theme_onBackground">#E2E6EA</color>
+
+    <!-- Widget specific accents -->
+    <color name="widget_pill_background">#191E23</color>
+    <color name="widget_pill_border">#33FFFFFF</color>
+    <color name="widget_dialog_surface">@android:color/white</color>
 </resources>

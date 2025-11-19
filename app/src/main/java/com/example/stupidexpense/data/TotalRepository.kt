@@ -31,6 +31,18 @@ class TotalRepository(appContext: Context) {
         }
     }
 
+    /**
+     * Convenience helper that increments the persisted total by the provided delta.
+     * Eliminates the need for callers to read the stream, wait for the value, and
+     * then write it back just to perform a simple addition.
+     */
+    suspend fun addToTotal(delta: Float) {
+        applicationContext.totalDataStore.edit { prefs ->
+            val current = prefs[totalKey] ?: 0f
+            prefs[totalKey] = current + delta
+        }
+    }
+
     /** Helper dedicated to the reset action. */
     suspend fun resetTotal() = saveTotal(0f)
 }

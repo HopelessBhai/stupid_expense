@@ -7,18 +7,32 @@ Stupid Expense is a minimalistic, no bullshit app for budget expense management.
 - **Always-on persistence** – total is stored with DataStore, so numbers survive app restarts and device reboots.
 - **Quick reset flow** – overflow menu opens a dedicated reset screen with a single confirmation tap.
 - **Pure Compose UI** – built entirely with Material 3 components for a lightweight feel and dark/light theme support.
+- **Homescreen widget quick add** – a tappable pill launches a dialog-style activity for number entry, so it works consistently on Android 14 and below.
+
+## Homescreen widget
+1. Long-press on your launcher, pick **Widgets**, and drop *Stupid Expense Widget* on the home screen.
+2. Tap the quick-add pill or `+` button; a lightweight dialog pops up with a numeric field plus **Add**/**Cancel** actions.
+3. Enter the amount, hit **Add**, and the dialog closes while the widget refreshes with the updated total.
+4. Tap anywhere outside the pill to jump into the full Compose experience.
+
+> RemoteInput/EditText inside widgets is no longer required. The dialog flow works across Android 14 and older devices, matching the platform restriction that inline typing only becomes available starting Android 15.
 
 ## How it is wired
 - `MainActivity` renders the spend input surface, while `ResetActivity` handles wiping the saved total.
 - `TotalViewModel` owns UI state, validates input, and exposes intents for adding or resetting amounts.
-- `TotalRepository` wraps `DataStore<Preferences>` so persistence is decoupled from the UI layer.
+- `TotalRepository` wraps `DataStore<Preferences>` so persistence is decoupled from the UI layer and is reused by widgets.
+- `StupidExpenseWidgetProvider` renders the homescreen UI and launches `WidgetQuickAddActivity` for numeric input.
+- `WidgetQuickAddActivity` is a dialog-themed activity that validates the number, saves it via the repository, and broadcasts widget updates.
 
 ```
 app/src/main/java/com/example/stupidexpense
 ├── MainActivity.kt          # Input + running total screen
 ├── ResetActivity.kt         # Confirmation screen for clearing the saved total
-├── data/TotalRepository.kt  # DataStore persistence
-└── ui/TotalViewModel.kt     # State holder shared by both activities
+├── data/TotalRepository.kt  # DataStore persistence + helper for widget additions
+├── ui/TotalViewModel.kt     # State holder shared by both activities
+└── widget/
+    ├── StupidExpenseWidgetProvider.kt  # RemoteViews + PendingIntent wiring
+    └── dialog/WidgetQuickAddActivity.kt # Dialog-style quick add flow
 ```
 
 ## Getting started

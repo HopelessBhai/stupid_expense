@@ -2,4 +2,14 @@
 <resources>
     <string name="app_name">Stupid Expense</string>
     <string name="reset_screen_title">Reset Total</string>
+    <string name="widget_total_label">Total</string>
+    <string name="widget_amount_hint">Enter amount</string>
+    <string name="widget_add_content_description">Add amount</string>
+    <string name="widget_name">Stupid Expense Widget</string>
+    <string name="widget_description">Add expenses directly from your home screen</string>
+    <string name="widget_quick_add_hint">Tap to add amount</string>
+    <string name="widget_dialog_title">Add expense</string>
+    <string name="widget_dialog_add_button">Add</string>
+    <string name="widget_dialog_cancel_button">Cancel</string>
+    <string name="widget_dialog_input_error">Enter a valid number</string>
 </resources>
