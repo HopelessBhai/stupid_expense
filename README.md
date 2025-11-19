@@ -15,8 +15,6 @@ Stupid Expense is a minimalistic, no bullshit app for budget expense management.
 3. Enter the amount, hit **Add**, and the dialog closes while the widget refreshes with the updated total.
 4. Tap anywhere outside the pill to jump into the full Compose experience.
 
-> RemoteInput/EditText inside widgets is no longer required. The dialog flow works across Android 14 and older devices, matching the platform restriction that inline typing only becomes available starting Android 15.
-
 ## How it is wired
 - `MainActivity` renders the spend input surface, while `ResetActivity` handles wiping the saved total.
 - `TotalViewModel` owns UI state, validates input, and exposes intents for adding or resetting amounts.
