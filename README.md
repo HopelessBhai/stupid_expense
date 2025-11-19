@@ -39,7 +39,8 @@ app/src/main/java/com/example/stupidexpense
 1. Install Android Studio (Hedgehog or newer) with the Android 34 SDK and make sure you have JDK 17.
 2. Clone this repo and open the root folder in Android Studio.
 3. Sync the Gradle project; it uses the Kotlin 1.9.24 toolchain and Compose BOM 2024.09.01.
-4. Run the `app` configuration to deploy on a device or emulator (minSdk 26).
+4. If you just want to try it out, grab the latest signed APK from the Releases page of this repository.
+5. Otherwise, run the `app` configuration to deploy on a device or emulator (minSdk 26).
 
 Command-line build:
 ```bash
