@@ -1,0 +1,58 @@
+# Gradle files
+.gradle/
+build/
+**/build/
+gradle-*/
+*.zip
+gradle-8.9/
+
+
+# Local configuration
+local.properties
+
+# Android Studio / IntelliJ files
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Captures and generated outputs
+captures/
+.externalNativeBuild/
+
+# Keystore files (VERY IMPORTANT)
+*.jks
+*.keystore
+
+# APK / AAB outputs
+*.apk
+*.ap_
+*.aab
+
+# Log files
+*.log
+
+# temp files
+*.tmp
+*.temp
+
+# macOS files
+.DS_Store
+
+# Windows files
+Thumbs.db
+
+# Kotlin/Java build outputs
+out/
+
+# Gradle Wrapper JARs (Optional)
+# gradle/wrapper/gradle-wrapper.jar
+
+# Jetpack Compose
+**/compose/**/debug/**
+
+# NDK / C++ builds
+.cxx/
+
+# VSCode or other IDE files
+.vscode/
