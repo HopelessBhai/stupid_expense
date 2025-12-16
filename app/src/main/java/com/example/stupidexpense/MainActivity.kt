@@ -1,7 +1,10 @@
 package com.example.stupidexpense
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -32,6 +35,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.stupidexpense.data.TotalRepository
 import com.example.stupidexpense.ui.TotalUiState
@@ -42,12 +47,14 @@ import java.text.DecimalFormat
 
 class MainActivity : ComponentActivity() {
 
-    // Reuse one repository/ViewModel per activity so the stream always points at DataStore.
     private val repository by lazy { TotalRepository(applicationContext) }
     private val viewModel: TotalViewModel by viewModels { TotalViewModelFactory(repository) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (!isSmsPermissionGranted()) {
+            requestSmsPermission()
+        }
         setContent {
             StupidExpenseTheme {
                 val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -59,6 +66,50 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+    }
+
+    private fun isSmsPermissionGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.RECEIVE_SMS
+        ) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_SMS
+                ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestSmsPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS),
+            SMS_PERMISSION_CODE
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == SMS_PERMISSION_CODE) {
+            if (grantResults.isNotEmpty() &&
+                grantResults.all { it == PackageManager.PERMISSION_GRANTED }
+            ) {
+                // Permissions granted
+            } else {
+                Toast.makeText(
+                    this,
+                    "SMS permissions are required to read messages.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+    companion object {
+        private const val SMS_PERMISSION_CODE = 101
     }
 }
 
@@ -77,7 +128,6 @@ private fun MainScreen(
             verticalArrangement = Arrangement.spacedBy(18.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.align(Alignment.End)) {
-                // Overflow control mimics a widget menu and leads to the reset screen.
                 IconButton(onClick = onOpenReset) {
                     Icon(imageVector = Icons.Filled.MoreVert, contentDescription = "Reset options")
                 }
@@ -86,7 +136,6 @@ private fun MainScreen(
             TotalHeader(total = state.total)
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                // Input row keeps things compact so it can live like a widget.
                 OutlinedTextField(
                     value = state.input,
                     onValueChange = onAmountChange,
@@ -103,7 +152,6 @@ private fun MainScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Provide a textual entry to the reset screen for discoverability.
             TextButton(onClick = onOpenReset, modifier = Modifier.align(Alignment.End)) {
                 Text(text = "Reset total")
             }
@@ -115,7 +163,6 @@ private fun MainScreen(
 private fun TotalHeader(total: Float) {
     val formatted = remember(total) { DecimalFormat("#,##0.##").format(total.toDouble()) }
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-        // Tiny label sits above the headline, similar to how widgets caption data.
         Text(text = "Total", style = MaterialTheme.typography.labelMedium)
         Text(
             text = "₹$formatted",
